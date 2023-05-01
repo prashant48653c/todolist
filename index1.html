@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-Do list</title>
+</head>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Tahoma, Verdana, sans-serif;
+    }
+
+    html {
+        font-size: 62.55%;
+    }
+
+    :root {
+        --bg: linear-gradient(to right top, #173b70, #1d4b90, #255cb1, #2f6dd4, #3c7ff7);;
+        --purple: #b07eeb;
+        --para: #a4adc6;
+        --white: #fffdfd;
+    }
+
+    p {
+        font-size: 2rem;
+        text-align: center;
+        color: black;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+        text-transform: capitalize;
+        background-image: var(--bg);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+    }
+    ::-webkit-scrollbar{
+        display: none;
+    }
+
+    .heading {
+        width: 100%;
+        text-align: center;
+        background-color: var(--purple);
+        padding: 1rem 3rem;
+        color: white;
+        margin: 1rem;
+    }
+
+    .work {
+        width: 100%;
+    }
+
+    .container {
+        overflow-x: hidden;
+        overflow-y: scroll;
+        height: 500px;
+        width: 500px;
+        background-color: var(--white);
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        padding: 2rem;
+        flex-direction: column;
+        border-radius: 1rem;
+
+    }
+
+    .input {
+        outline: none;
+        border: .1px solid black;
+        width: 100%;
+        height: 2.9rem;
+        padding: .3rem;
+    }
+
+    .work {
+        position: relative;
+        color: black;
+        padding: .5rem;
+        margin: .5rem 0;
+        flex-direction: column;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+
+    }
+
+    .icon {
+        font-size: 1.5rem;
+        color: black;
+    }
+
+    .btn {
+        display: inline-block;
+        border: none;
+        outline: none;
+        background-color: var(--purple);
+        color: white;
+        padding: .7rem 2rem;
+        cursor: pointer;
+        text-align: center;
+        border-radius: .8rem;
+        margin: 1rem 0;
+        font-size: 1.4rem;
+        font-weight: 900;
+
+    }
+
+    .btn:hover {
+        background-color: var(--para);
+    }
+
+    li {
+        position: relative;
+        margin: 1rem 0;
+        background-color: var(--bg);
+        width: 100%;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        gap: 3rem;
+        padding: .4rem;
+        text-transform: uppercase;
+        font-weight: 700;
+        font-size: 1.3rem;
+    }
+
+    li::before {
+        content: "";
+        height: 2rem;
+        width: 2rem;
+        border-radius: 33rem;
+        background-color: #a4adc6;
+        border: .1px solid #ccc;
+    }
+
+    .checked {
+        border-radius: .4rem;
+        color: #665d5d;
+        text-decoration: line-through;
+        font-weight: 200;
+
+    }
+
+    .checked::before {
+        content: "";
+        background-color: red;
+        color: #000;
+        text-decoration: line-through;
+
+    }
+
+    .span {
+        display: none;
+        position: absolute;
+        top: 5px;
+        right: 6px;
+        height: 30px;
+        text-align: center;
+        border-radius: 33rem;
+        width: 30px;
+        cursor: pointer;
+    }
+
+    .not-hidden {
+        display: block;
+    }
+
+    
+    @media(max-width:500px){
+        html{
+            font-size: 54%;
+        }
+        .container{
+            margin: 2rem ;
+            width: 80%;
+        }
+        .li{
+            width: 90%;
+        }
+    }
+
+    @media(max-width:400px){
+        html{
+            font-size: 50%;
+        }
+        .container{
+            margin: .5rem ;
+            width: 80%;
+        }
+    }
+    
+
+
+</style>
+
+
+
+<body>
+
+
+
+    <div class="container">
+        <div class="heading">
+            <h2>website to do</h2>
+        </div>
+
+        <input type="text" class="input" id="input" placeholder="Add some text">
+        <ul class="work" id="work">
+
+        </ul>
+        <button class="btn" id="btn">ENTER</button>
+
+    </div>
+
+
+
+
+
+
+
+
+    <script>
+
+        // const getData=async()=>{
+
+
+        // let data={
+        //     method:'POST',
+        //     headers:{
+        //         'Content-type':'application/json'
+        //     },
+        //     body: JSON.stringify({
+        //         title:'intro',
+        //         body:"hello i am prashant",
+        //         userID:44,
+        //     }),
+        // }
+        // let promise=await fetch('https://jsonplaceholder.typicode.com/todos',data)
+        //       let response= await promise.json()
+        //       return response
+
+
+        // }
+        // const mainFunc=async()=>{
+        //     let todo=await getData()
+        //     console.log(todo)
+        // }
+        // mainFunc()
+
+
+
+
+
+
+
+        let work = document.querySelector('.work');
+
+     
+        function show() {
+  let savedData = localStorage.getItem('data');
+  if (savedData) {
+    work.innerHTML = savedData;
+  }
+}
+       
+        function save() {
+            localStorage.setItem('data',work.innerHTML)
+        }
+
+        let btn = document.getElementById('btn');
+        let input = document.getElementById('input');
+        
+
+        console.log(work)
+
+        input.addEventListener('keypress',(e)=>{
+            if (e.key === 'Enter') {
+    btn.click();
+            }
+         
+        })
+     
+
+
+        btn.addEventListener('click', () => {
+            if (input.value != "") {
+                let newElem = document.createElement('li');
+                newElem.setAttribute('class', 'li')
+                console.log(newElem)
+                let newElem2 = document.createElement('span');
+                newElem2.setAttribute('class', 'span')
+                console.log(newElem2)
+                newElem2.innerHTML = '\u00d7'
+                newElem.innerHTML = input.value;
+                console.log(input.value)
+                work.prepend(newElem)
+                newElem.append(newElem2)
+
+
+            } else {
+                alert('Box is Empty')
+            }
+            input.value = ""
+            save();
+        })
+
+
+
+        work.addEventListener('click', (e) => {
+            console.log(e.target)
+            let li = document.querySelectorAll('li');
+            li.forEach((list) => {
+                if ((e.target).contains(list)) {
+                    console.log('li was target')
+                    list.classList.toggle('checked')
+                    save();
+                    let span = document.querySelectorAll('span');
+
+
+
+
+                    span.forEach((elem) => {
+                       
+                        if (elem.parentElement == list) {
+                            elem.classList.toggle('not-hidden')
+                            save();
+                            elem.addEventListener('click', () => {
+                                
+
+                                if (list.contains(elem)) {
+                                    list.remove();
+                                    save();
+                                }
+                               
+                            })
+                        }
+                    })
+                }
+
+
+            })
+
+        })
+
+
+
+       
+
+show();
+
+
+
+
+
+
+    </script>
+    <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+</html>
